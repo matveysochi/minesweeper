@@ -1,0 +1,20 @@
+﻿@model LoginModel
+@{
+    ViewBag.Title = "ИГРА";
+}
+<div class="text-danger" asp-validation-summary="All"></div>
+<form class="p-2 m-2" asp-action="Login" method="post">
+    <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl">
+    <div>
+        <label class="form-label" asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" />
+    </div>
+    <div>
+        <label class="form-label" asp-for="Password">Пароль</label>
+        <input class="form-control" asp-for="Password" />
+    </div>
+    <div class=" p-2 m-2 text-center">
+        <button class="btn btn-primary">Войти</button>
+        <a class="btn btn-secondary" asp-action="Sign">Зарегистрироваться</a>
+    </div>
+</form>

@@ -1,0 +1,57 @@
+﻿::-webkit-scrollbar {
+    width: 0px;
+}
+html {
+    min-width: 1450px
+}
+.color1 {
+    color: blue;
+    font-weight: bold;
+}
+.color2 {
+    color: mediumseagreen;
+    font-weight: bold;
+}
+.color3 {
+    color: red;
+    font-weight: bold;
+}
+.color4 {
+    color: darkblue;
+    font-weight: bold;
+}
+.color5 {
+    color: blueviolet;
+    font-weight: bold;
+}
+.color6 {
+    color: mediumturquoise;
+    font-weight: bold;
+}
+.color7 {
+    color: black;
+    font-weight: bold;
+}
+.color8 {
+    color: lightgrey;
+    font-weight: bold;
+}
+.cell {
+    height: 30px;
+    width: 30px;
+    border: 1px solid;
+}
+.close {
+    border-color: gray;
+    background-color: gainsboro;
+}
+.open {
+    border-color: lightgray;
+    background-color: lavender;
+}
+.bomb {
+    background-color: red;
+}
+.flag {
+    background-color: chocolate;
+}

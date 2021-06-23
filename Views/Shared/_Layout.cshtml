@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/game.css" />
+    <link rel="stylesheet" href="~/css/Menu.css" />
+    <title>@ViewBag.Title</title>
+    <script type="module" src="~/js/Game.js"></script>
+</head>
+<body>
+    @await Component.InvokeAsync(nameof(NavigationPanel))
+    @RenderBody()
+</body>
+</html>
+

@@ -1,0 +1,23 @@
+﻿@model SignModel
+@{
+    ViewBag.Title = "ИГРА";
+}
+<div class="text-danger" asp-validation-summary="All"></div>
+<form class="p-2 m-2" asp-action="Sign" method="post">
+    <div>
+        <label class="form-label" asp-for="Name">Имя</label>
+        <input class="form-control" asp-for="Name" />
+    </div>
+    <div>
+        <label class="form-label" asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" />
+    </div>
+    <div>
+        <label class="form-label" asp-for="Password">Пароль</label>
+        <input class="form-control" asp-for="Password" />
+    </div>
+    <div class="p-2 m-2 text-center">
+        <button class="btn btn-primary">Зарегистрироваться</button>
+        <a class="btn btn-secondary" asp-action="Login">Отмена</a>
+    </div>
+</form>
