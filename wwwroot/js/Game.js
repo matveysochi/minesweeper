@@ -41,31 +41,28 @@ let timeLimit = 99 * 60 + 59;
 
 let currentLevel = 0;
 
-levelBtns.forEach(b => b.addEventListener('click', () => {
-    currentLevel = b.dataset.level;
+configBtns(levelBtns, level => NewGame(level));
 
-    NewGame(currentLevel)
-    RefreshStat(currentLevel)
-
-    levelBtns.forEach((btn, index) => ChangeButtonView(btn, currentLevel == index))
-}));
-
-modeBtns.forEach(b => b.addEventListener('click', () => {
-    let mode = b.dataset.mode;
-
+configBtns(modeBtns, mode => {
     gameArea.hidden = mode != 0;
     statArea.hidden = mode == 0;
-
-    if (mode == 1) RefreshStat(currentLevel);
-
-    modeBtns.forEach((btn, index) => ChangeButtonView(btn, mode == index))
-}));
+})
 
 privateBtn.addEventListener('click', () => ChangeStat(true))
 publicBtn.addEventListener('click', () => ChangeStat(false))
 
 GetState();
 RefreshStat(0);
+
+
+function configBtns(btns, callback) {
+    btns.forEach(btn => btn.addEventListener('click', () => {
+        levelBtns.forEach((btn, index) => ChangeButtonView(btn, currentLevel == index))
+        let value = btn.dataset.value;
+        callback(value);
+        RefreshStat(currentLevel);
+    }));
+}
 
 function ChangeButtonView(btn, primary) {
     if (primary) {
@@ -147,7 +144,6 @@ async function NewGame(level) {
 }
 
 async function Action(event) {
-
     if (time >= timeLimit) {
         clearInterval(timerId);
         return;
@@ -202,7 +198,6 @@ async function Action(event) {
     let restToOpen = type.width * type.height - openCount - type.bombCount;
     let restFlag = type.bombCount - flagCount;
     minesElement.innerHTML = `${restFlag}/${restToOpen}`;
-
 }
 
 async function GetState() {
