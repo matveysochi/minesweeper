@@ -41,26 +41,31 @@ let timeLimit = 99 * 60 + 59;
 
 let currentLevel = 0;
 
-configBtns(levelBtns, level => NewGame(level));
+configBtns(levelBtns, level => {
+    currentLevel = level;
+    NewGame(level)
+    RefreshStat(level);
+});
 
 configBtns(modeBtns, mode => {
     gameArea.hidden = mode != 0;
     statArea.hidden = mode == 0;
+    RefreshStat(currentLevel);
 })
 
 privateBtn.addEventListener('click', () => ChangeStat(true))
 publicBtn.addEventListener('click', () => ChangeStat(false))
+timerElement.addEventListener('click', () => NewGame(currentLevel))
 
 GetState();
-RefreshStat(0);
+RefreshStat(currentLevel);
 
 
 function configBtns(btns, callback) {
     btns.forEach(btn => btn.addEventListener('click', () => {
-        levelBtns.forEach((btn, index) => ChangeButtonView(btn, currentLevel == index))
         let value = btn.dataset.value;
+        btns.forEach((b, index) => ChangeButtonView(b, value == index))
         callback(value);
-        RefreshStat(currentLevel);
     }));
 }
 
@@ -122,15 +127,10 @@ function AddRecords(table, records) {
     });
 }
 
-function TimeFromSpan(timeSpan) {
-    return `${NormNum(timeSpan.totalMinutes)}:${NormNum(timeSpan.seconds)}`
-}
-function NormNum(dig) {
-    dig = Math.floor(dig);
-    return dig < 10 ? '0' + dig : dig;
-}
 
 async function NewGame(level) {
+    clearInterval(timerId);
+
     let searchParams = new URLSearchParams();
     searchParams.set('type', level);
 
@@ -192,12 +192,7 @@ async function Action(event) {
             if (cell.isFlag) flagCount++;
         }
     }
-
-    let type = model.type;
-
-    let restToOpen = type.width * type.height - openCount - type.bombCount;
-    let restFlag = type.bombCount - flagCount;
-    minesElement.innerHTML = `${restFlag}/${restToOpen}`;
+    RefreshMinesView(model.type, openCount, flagCount)
 }
 
 async function GetState() {
@@ -244,25 +239,24 @@ function refreshField(model) {
             if (cell.isFlag) flagCount++;
         }
     }
-
-    let type = model.type;
-
-    let restToOpen = type.width * type.height - openCount - type.bombCount;
-    let restFlag = type.bombCount - flagCount;
-    minesElement.innerHTML = `${restFlag}/${restToOpen}`;
+    RefreshMinesView(model.type, openCount, flagCount)
 }
+
 
 function tick() {
     time = time >= timeLimit ? timeLimit : time + 1
     refreshTimeView();
 }
 
+function RefreshMinesView(type, openCount, flagCount) {
+    let restToOpen = NormNum(type.width * type.height - openCount - type.bombCount, 3);
+    let restFlag = NormNum(type.bombCount - flagCount);
+    minesElement.innerHTML = `${restFlag}/${restToOpen}`;
+}
+
 function refreshTimeView(end, win) {
-    let getDig = dig => {
-        return dig < 10 ? '0' + dig : dig;
-    }
-    let min = getDig(Math.floor(time / 60));
-    let sec = getDig(Math.floor(time % 60));
+    let min = NormNum(Math.floor(time / 60));
+    let sec = NormNum(Math.floor(time % 60));
     timerElement.innerHTML = `${min}:${sec}`;
     if (end) {
         timerElement.classList.remove('btn-outline-secondary');
@@ -276,6 +270,15 @@ function refreshTimeView(end, win) {
         timerElement.classList.remove('btn-success')
         timerElement.classList.remove('btn-danger')
     }
+}
+
+function TimeFromSpan(timeSpan) {
+    return `${NormNum(timeSpan.totalMinutes)}:${NormNum(timeSpan.seconds)}`
+}
+function NormNum(dig, count=2) {
+    dig = Math.floor(dig);
+    for (let i = 0; i < count - String(dig).length; i++) dig = '0' + dig;
+    return dig;
 }
 
 function getClassString(cell) {
